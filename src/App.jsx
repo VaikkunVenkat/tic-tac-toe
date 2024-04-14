@@ -3,16 +3,31 @@ import GameBoard from "./components/GameBoard";
 import { useState } from "react";
 import Log from "./components/Log";
 
+const winningCombinations = [
+  [(0, 0), (0, 1), (0, 2)],
+  [(1, 0), (1, 1), (1, 2)],
+  [(2, 0), (2, 1), (2, 2)],
+  [(0, 0), (1, 0), (2, 0)],
+  [(0, 1), (1, 1), (2, 1)],
+  [(0, 2), (1, 2), (2, 2)],
+  [(0, 0), (1, 1), (2, 2)],
+  [(0, 2), (1, 1), (2, 0)]
+]
+
 function App() {
-  const [playerActive, setPlayerActive] = useState("X");
   const [gameState, setGameState] = useState([]);
+
+  let currentPlayerActive = "X";
+  const lastTurn = gameState[gameState.length - 1]
+  if (!!lastTurn) {
+    currentPlayerActive = lastTurn.player === "X" ? "O" : "X"
+  }
 
   const handleCellClick = (rowIdx, colIdx) => {
     setGameState((prevGameState) => [
       ...prevGameState,
-      { player: playerActive, rowIdx, colIdx },
+      { player: currentPlayerActive, rowIdx, colIdx },
     ]);
-    setPlayerActive((currentPlayer) => (currentPlayer === "X" ? "O" : "X"));
   };
 
   return (
@@ -22,12 +37,12 @@ function App() {
           <Player
             initialName="Player 1"
             symbol="X"
-            active={playerActive === "X"}
+            playerActive={currentPlayerActive}
           />
           <Player
             initialName="Player 2"
             symbol="O"
-            active={playerActive === "O"}
+            playerActive={currentPlayerActive}
           />
         </ol>
         <GameBoard onCellClick={handleCellClick} gameState={gameState} />
