@@ -1,26 +1,18 @@
+import { createPortal } from "react-dom";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Log from "./components/Log";
-
-const winningCombinations = [
-  [(0, 0), (0, 1), (0, 2)],
-  [(1, 0), (1, 1), (1, 2)],
-  [(2, 0), (2, 1), (2, 2)],
-  [(0, 0), (1, 0), (2, 0)],
-  [(0, 1), (1, 1), (2, 1)],
-  [(0, 2), (1, 2), (2, 2)],
-  [(0, 0), (1, 1), (2, 2)],
-  [(0, 2), (1, 1), (2, 0)]
-]
+import checkForWinner from "./utils/calculateGameState";
 
 function App() {
   const [gameState, setGameState] = useState([]);
+  const [winner, setWinner] = useState(null);
 
   let currentPlayerActive = "X";
-  const lastTurn = gameState[gameState.length - 1]
+  const lastTurn = gameState[gameState.length - 1];
   if (!!lastTurn) {
-    currentPlayerActive = lastTurn.player === "X" ? "O" : "X"
+    currentPlayerActive = lastTurn.player === "X" ? "O" : "X";
   }
 
   const handleCellClick = (rowIdx, colIdx) => {
@@ -30,8 +22,32 @@ function App() {
     ]);
   };
 
+  const handleResetGame = () => {
+    setWinner(null);
+    setGameState([]);
+  };
+
+  useEffect(() => {
+    const winningPlayer = checkForWinner(gameState);
+    if (winningPlayer !== null) {
+      setWinner(winningPlayer);
+    }
+    if (gameState.length === 9) {
+      setWinner("Draw");
+    }
+  }, [gameState]);
+
   return (
     <main>
+      {winner !== null &&
+        createPortal(
+          <div id="game-over">
+            <h2>Game Over!</h2>
+            <p>{winner === "Draw" ? "Game Drawn!" : `${winner} won!`}</p>
+            <button onClick={handleResetGame}>Start again?</button>
+          </div>,
+          document.body
+        )}
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player

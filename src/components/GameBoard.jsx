@@ -5,7 +5,7 @@ const initialGameBoard = [
   ];
 
 export default function GameBoard({ gameState, onCellClick }) {  
-  let gameBoard = initialGameBoard;
+  let gameBoard = structuredClone(initialGameBoard);
   for (const turn of gameState) {
     gameBoard[turn.rowIdx][turn.colIdx] = turn.player;
   }
