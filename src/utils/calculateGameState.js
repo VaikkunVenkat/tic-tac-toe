@@ -1,3 +1,5 @@
+import { PLAYER_O_SYMBOL, PLAYER_X_SYMBOL } from "../constants";
+
 const winningCombinations = [
   [
     [0, 0],
@@ -56,20 +58,20 @@ const checkCombination = (playerTurns, combination) =>
 
 
 const checkForWinner = (gameState) => {
-  const playerXTurns = filterTurnsOnPlayer(gameState, "X");
-  const playerOTurns = filterTurnsOnPlayer(gameState, "O");
+  const playerXTurns = filterTurnsOnPlayer(gameState, PLAYER_X_SYMBOL);
+  const playerOTurns = filterTurnsOnPlayer(gameState, PLAYER_O_SYMBOL);
   let winnerSymbol = null;
   for (const combination of winningCombinations) {
     const possibleXWinner = checkCombination(playerXTurns, combination);
     const possibleOWinner = checkCombination(playerOTurns, combination);
 
     if (possibleXWinner) {
-      winnerSymbol = "X";
+      winnerSymbol = PLAYER_X_SYMBOL;
       break;
     }
 
     if (possibleOWinner) {
-      winnerSymbol = "O";
+      winnerSymbol = PLAYER_O_SYMBOL;
       break;
     }
   }
