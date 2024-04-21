@@ -58,22 +58,22 @@ const checkCombination = (playerTurns, combination) =>
 const checkForWinner = (gameState) => {
   const playerXTurns = filterTurnsOnPlayer(gameState, "X");
   const playerOTurns = filterTurnsOnPlayer(gameState, "O");
-  let winner = null;
+  let winnerSymbol = null;
   for (const combination of winningCombinations) {
     const possibleXWinner = checkCombination(playerXTurns, combination);
     const possibleOWinner = checkCombination(playerOTurns, combination);
 
     if (possibleXWinner) {
-      winner = "X";
+      winnerSymbol = "X";
       break;
     }
 
     if (possibleOWinner) {
-      winner = "O";
+      winnerSymbol = "O";
       break;
     }
   }
-  return winner;
+  return winnerSymbol;
 };
 
 export default checkForWinner;
